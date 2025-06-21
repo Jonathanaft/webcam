@@ -208,6 +208,7 @@
 
         <button id="recordBtn" onclick="toggleRecording()">Start Recording</button>
 
+        <!-- Download link for MP4 file -->
         <a id="downloadLink" style="display:none;">Download MP4 Recording</a>
       </div>
     </div>
@@ -274,6 +275,7 @@
       downloadLink.href = url;
       downloadLink.download = `${fileName}.mp4`;  // Set MP4 filename
       downloadLink.style.display = 'inline-block';
+      downloadLink.textContent = 'Download MP4 Recording';
     }
 
     function toggleRecording() {
@@ -289,7 +291,7 @@
         mediaRecorder.start();
         recordBtn.textContent = 'Stop Recording';
         recordBtn.classList.add('recording');
-        downloadLink.style.display = 'none';
+        downloadLink.style.display = 'none';  // Hide download link until recording stops
         isRecording = true;
       }
     }
