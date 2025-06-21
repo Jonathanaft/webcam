@@ -2,231 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Webcam for PC - MP4 Only</title>
+  <title>Webcam Viewer (Webcam for PC/Mac)</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #00bcd4, #3f51b5);  /* Smooth Blue and Cyan Gradient */
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      overflow: hidden;
-    }
-
-    .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      max-width: 1200px;
-      height: 100%;
-    }
-
-    .video-container {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-    }
-
-    video {
-      width: 90%;
-      max-width: 800px;
-      max-height: 70vh;
-      border: 4px solid #ffffff;
-      border-radius: 15px;
-      box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.3);
-      background-color: #000;
-      transition: transform 0.3s ease-in-out;
-    }
-
-    video:hover {
-      transform: scale(1.05);
-    }
-
-    .sidebar {
-      background-color: #1e3d66;
-      width: 250px;
-      height: 100%;
-      padding: 30px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.4);
-    }
-
-    h1 {
-      font-size: 3em;
-      color: #ffffff;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-      margin-bottom: 20px;
+      font-family: Arial, sans-serif;
       text-align: center;
+      background: #111;
+      color: #fff;
     }
 
-    .disclaimer {
-      font-size: 1.1em;
-      color: #ffeb3b;  /* Bright Yellow */
-      background-color: #1e3d66;
-      padding: 15px;
-      border-radius: 8px;
-      width: 90%;
-      margin-top: 15px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .disclaimer p {
-      margin: 0;
-      line-height: 1.4;
-    }
-
-    .controls {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      margin-top: 30px;
-    }
-
-    input {
-      font-size: 1.2em;
-      padding: 12px 20px;
-      margin-bottom: 20px;
-      cursor: pointer;
-      border: none;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      background-color: #3f51b5;
-      color: white;
-      width: 100%;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    input:focus {
-      outline: none;
-      background-color: #00bcd4;
+    #webcam {
+      margin-top: 20px;
+      max-width: 100%;
+      border: 4px solid #444;
+      border-radius: 10px;
     }
 
     button {
-      padding: 12px 25px;
-      font-size: 1.1em;
-      margin: 15px 0;
-      cursor: pointer;
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
       border: none;
-      border-radius: 50px;
-      transition: all 0.3s ease;
-      background-color: #00bcd4;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .recording {
+      background-color: red;
       color: white;
-      width: 100%;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
-    button:hover {
-      background-color: #008c9e;
-      transform: scale(1.05);
-    }
-
-    button.recording {
-      background-color: #ff4081;  /* Recording state */
-      box-shadow: 0 4px 15px rgba(255, 64, 129, 0.5);
-    }
-
-    a {
-      display: none;
-      padding: 12px 25px;
-      background-color: #00bcd4;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
+    .controls {
       margin-top: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    }
-
-    a:hover {
-      background-color: #008c9e;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .sidebar {
-        width: 100%;
-        height: auto;
-        padding: 20px 15px;
-      }
-
-      .video-container {
-        margin-bottom: 20px;
-      }
-
-      h1 {
-        font-size: 2.5em;
-      }
-
-      input {
-        font-size: 1em;
-      }
-
-      button {
-        font-size: 1em;
-      }
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="video-container">
-      <video id="webcam" autoplay playsinline muted></video>
-    </div>
+  <h1>Webcam Viewer</h1>
+  <video id="webcam" autoplay playsinline muted></video>
 
-    <div class="sidebar">
-      <h1>Webcam for PC</h1>
-
-      <!-- Disclaimer about the tool's function -->
-      <div class="disclaimer">
-        <p><strong>Disclaimer:</strong> This tool records your webcam footage and automatically converts it to MP4 format. No edits or modifications are made to your footage. The video is saved exactly as recorded.</p>
-      </div>
-
-      <div class="controls">
-        <!-- Custom Filename Input -->
-        <input type="text" id="filenameInput" placeholder="Enter filename" />
-
-        <button id="recordBtn" onclick="toggleRecording()">Start Recording</button>
-
-        <!-- Download link for MP4 file -->
-        <a id="downloadLink" style="display:none;">Download MP4 Recording</a>
-      </div>
-    </div>
+  <div class="controls">
+    <button onclick="toggleFullscreen()">Toggle Fullscreen</button>
+    <button id="recordBtn" onclick="toggleRecording()">Start Recording</button>
+    <a id="downloadLink" style="display:none;" download="recorded.webm">Download Recording</a>
   </div>
-
-  <!-- Include ffmpeg.js -->
-  <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@4.4.2/dist/ffmpeg.min.js"></script>
 
   <script>
     const video = document.getElementById('webcam');
     const recordBtn = document.getElementById('recordBtn');
     const downloadLink = document.getElementById('downloadLink');
-    const filenameInput = document.getElementById('filenameInput');
 
     let mediaRecorder;
     let recordedChunks = [];
     let isRecording = false;
-    let fileName = 'recorded-webcam';
 
     // Request access to webcam
     async function initWebcam() {
@@ -240,42 +69,25 @@
         };
 
         mediaRecorder.onstop = function () {
-          const timestamp = new Date().toISOString().replace(/[:.]/g, '-');  // Format timestamp for filename
-          fileName = filenameInput.value.trim() || `recorded-webcam-${timestamp}`;
-
-          // Generate the WebM blob and convert it to MP4
           const blob = new Blob(recordedChunks, { type: 'video/webm' });
           recordedChunks = [];
-          convertToMp4(blob);
+          const url = URL.createObjectURL(blob);
+          downloadLink.href = url;
+          downloadLink.style.display = 'inline-block';
         };
       } catch (err) {
         alert('Error accessing webcam: ' + err);
       }
     }
 
-    // Convert WebM to MP4 using ffmpeg.js
-    async function convertToMp4(blob) {
-      const { createFFmpeg, fetchFile } = FFmpeg;
-      const ffmpeg = createFFmpeg({ log: true });
-
-      await ffmpeg.load();
-      const webmFile = new Blob([blob], { type: 'video/webm' });
-
-      // Convert WebM file to MP4
-      ffmpeg.FS('writeFile', 'input.webm', await fetchFile(webmFile));
-      await ffmpeg.run('-i', 'input.webm', 'output.mp4');
-
-      // Get the converted MP4 file from the FS
-      const mp4Data = ffmpeg.FS('readFile', 'output.mp4');
-
-      // Create a download link for MP4
-      const mp4Blob = new Blob([mp4Data.buffer], { type: 'video/mp4' });
-      const url = URL.createObjectURL(mp4Blob);
-
-      downloadLink.href = url;
-      downloadLink.download = `${fileName}.mp4`;  // Set MP4 filename
-      downloadLink.style.display = 'inline-block';
-      downloadLink.textContent = 'Download MP4 Recording';
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        video.requestFullscreen().catch(err => {
+          alert(`Error attempting to enable fullscreen mode: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
     }
 
     function toggleRecording() {
@@ -291,7 +103,7 @@
         mediaRecorder.start();
         recordBtn.textContent = 'Stop Recording';
         recordBtn.classList.add('recording');
-        downloadLink.style.display = 'none';  // Hide download link until recording stops
+        downloadLink.style.display = 'none';
         isRecording = true;
       }
     }
