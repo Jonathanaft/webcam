@@ -1,106 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webcam for PC - MP4 Only</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #00bcd4, #3f51b5);  /* Smooth Blue and Cyan Gradient */
+      color: #fff;
+      display: flex;
+      justify-content: center;
       align-items: center;
       height: 100vh;
       text-align: center;
       flex-direction: column;
       margin: 0;
+      overflow: hidden;
     }
 
     h1 {
-      font-size: 3em;
+      font-size: 3.5em;
       margin-bottom: 20px;
       color: #ffffff;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
     }
 
     video {
-      max-width: 100%;
-      max-height: 75vh;
-      border: 4px solid #3f51b5;
-      border-radius: 10px;
-      margin-bottom: 20px;
+      width: 90%;
+      max-width: 800px;
+      max-height: 70vh;
+      border: 4px solid #ffffff;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.3);
       background-color: #000;
-      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.6);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    video:hover {
+      transform: scale(1.05);
     }
 
     .disclaimer {
       font-size: 1.2em;
-      margin-top: 20px;
-      color: #ffeb3b;  /* Yellow for visibility */
+      margin-top: 15px;
+      color: #ffeb3b;  /* Bright Yellow for visibility */
       background-color: #1e3d66;
       padding: 15px;
       border-radius: 8px;
-      
+      width: 80%;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    }
 
     .disclaimer p {
       margin: 0;
       line-height: 1.4;
     }
 
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
     button {
-      padding: 12px 25px;
-      font-size: 1.1em;
-      margin: 10px;
+      padding: 15px 30px;
+      font-size: 1.2em;
       cursor: pointer;
       border: none;
-      border-radius: 5px;
-      transition: background-color 0.3s ease, transform 0.2s ease-in-out;
-      color: #fff;
-      background-color: #00bcd4;  /* Cyan */
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      background-color: #00bcd4;
+      color: white;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
 
     button:hover {
-      background-color: #008c9e;  /* Darker Cyan */
+      background-color: #008c9e;
       transform: scale(1.05);
     }
 
     button.recording {
-      background-color: #ff4081;  /* Pinkish color for recording */
+      background-color: #ff4081;  /* Color change while recording */
+      box-shadow: 0 4px 15px rgba(255, 64, 129, 0.5);
     }
 
-    .controls {
-      margin-top: 20px;
-    }
-
-    select, input {
+    input {
       font-size: 1em;
-      padding: 8px 16px;
-      margin: 10px;
+      padding: 12px 20px;
+      margin: 15px;
       cursor: pointer;
-      background-color: #3f51b5;  /* Blue */
-      color: white;
       border: none;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      background-color: #3f51b5;
+      color: white;
+      width: 80%;
+      max-width: 400px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
 
-    select:focus, input:focus {
+    input:focus {
       outline: none;
-      background-color: #00bcd4;  /* Cyan when focused */
-    }
-
-    input::placeholder {
-      color: #ddd;
+      background-color: #00bcd4;
     }
 
     a {
       display: none;
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: #00bcd4;  /* Cyan */
+      margin-top: 20px;
+      padding: 12px 25px;
+      background-color: #00bcd4;
       color: white;
       text-decoration: none;
-      border-radius: 5px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
     a:hover {
-      background-color: #008c9e;  /* Darker Cyan */
+      background-color: #008c9e;
     }
 
     @media (max-width: 768px) {
       h1 {
-        font-size: 2.5em;
+        font-size: 2.8em;
       }
 
       video {
@@ -109,7 +146,11 @@
 
       button {
         font-size: 1em;
-        padding: 10px 20px;
+        padding: 12px 25px;
+      }
+
+      input {
+        font-size: 0.9em;
       }
     }
   </style>
@@ -120,7 +161,7 @@
 
   <!-- Disclaimer about the tool's function -->
   <div class="disclaimer">
-    <p><strong>Disclaimer:</strong> This tool only records your webcam footage in its original format (WebM) and offers an option to convert it to MP4. No edits or modifications are made to your footage. The video is saved as it was recorded.</p>
+    <p><strong>Disclaimer:</strong> This tool records your webcam footage and automatically converts it to MP4 format. No edits or modifications are made to your footage. The video is saved exactly as recorded.</p>
   </div>
 
   <video id="webcam" autoplay playsinline muted></video>
@@ -128,17 +169,11 @@
   <div class="controls">
     <button onclick="toggleFullscreen()">Toggle Fullscreen</button>
 
-    <!-- Format Selection Dropdown -->
-    <select id="formatSelect">
-      <option value="webm">WebM</option>
-      <option value="mp4">MP4 (Conversion Required)</option>
-    </select>
-
     <!-- Custom Filename Input -->
     <input type="text" id="filenameInput" placeholder="Enter filename" />
 
     <button id="recordBtn" onclick="toggleRecording()">Start Recording</button>
-    <a id="downloadLink" style="display:none;">Download Recording</a>
+    <a id="downloadLink" style="display:none;">Download MP4 Recording</a>
   </div>
 
   <!-- Include ffmpeg.js -->
@@ -148,13 +183,11 @@
     const video = document.getElementById('webcam');
     const recordBtn = document.getElementById('recordBtn');
     const downloadLink = document.getElementById('downloadLink');
-    const formatSelect = document.getElementById('formatSelect');
     const filenameInput = document.getElementById('filenameInput');
 
     let mediaRecorder;
     let recordedChunks = [];
     let isRecording = false;
-    let fileExtension = 'webm';
     let fileName = 'recorded-webcam';
 
     // Request access to webcam
@@ -169,26 +202,13 @@
         };
 
         mediaRecorder.onstop = function () {
-          const selectedFormat = formatSelect.value;
           const timestamp = new Date().toISOString().replace(/[:.]/g, '-');  // Format timestamp for filename
-          fileExtension = selectedFormat === 'mp4' ? 'mp4' : 'webm';
-          
-          // Use custom filename or default
           fileName = filenameInput.value.trim() || `recorded-webcam-${timestamp}`;
-          
-          // Generate the blob and URL for WebM or MP4 download
-          const blob = new Blob(recordedChunks, { type: selectedFormat === 'webm' ? 'video/webm' : 'video/mp4' });
-          recordedChunks = [];
-          const url = URL.createObjectURL(blob);
-          
-          downloadLink.href = url;
-          downloadLink.download = `${fileName}.${fileExtension}`;  // Dynamic filename
-          downloadLink.style.display = 'inline-block';
 
-          // MP4 conversion
-          if (selectedFormat === 'mp4') {
-            convertToMp4(blob);
-          }
+          // Generate the WebM blob and convert it to MP4
+          const blob = new Blob(recordedChunks, { type: 'video/webm' });
+          recordedChunks = [];
+          convertToMp4(blob);
         };
       } catch (err) {
         alert('Error accessing webcam: ' + err);
@@ -216,6 +236,7 @@
 
       downloadLink.href = url;
       downloadLink.download = `${fileName}.mp4`;  // Set MP4 filename
+      downloadLink.style.display = 'inline-block';
     }
 
     function toggleFullscreen() {
