@@ -2,60 +2,130 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Webcam Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webcam for PC</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #111;
-      color: #fff;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    #webcam {
-      margin-top: 20px;
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #282c34;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    video {
       max-width: 100%;
-      border: 4px solid #444;
+      max-height: 75vh;
+      border: 3px solid #444;
       border-radius: 10px;
+      margin-bottom: 20px;
+      background-color: #000;
     }
 
     button {
+      padding: 12px 25px;
+      font-size: 1.1em;
       margin: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
+      cursor: pointer;
       border: none;
       border-radius: 5px;
-      cursor: pointer;
+      transition: background-color 0.3s ease;
+      color: #fff;
+    }
+
+    button:hover {
+      background-color: #444;
     }
 
     .recording {
       background-color: red;
-      color: white;
     }
 
     .controls {
       margin-top: 20px;
     }
+
+    select {
+      font-size: 1em;
+      padding: 8px 16px;
+      margin: 10px;
+      cursor: pointer;
+      background-color: #444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    a {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: green;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2em;
+      }
+
+      video {
+        max-height: 60vh;
+      }
+
+      button {
+        font-size: 1em;
+        padding: 10px 20px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <h1>Webcam Viewer</h1>
+  <h1>Webcam for PC</h1>
   <video id="webcam" autoplay playsinline muted></video>
 
   <div class="controls">
     <button onclick="toggleFullscreen()">Toggle Fullscreen</button>
+
+    <!-- Format Selection Dropdown -->
+    <select id="formatSelect">
+      <option value="webm">WebM</option>
+      <option value="mp4">MP4 (Requires conversion)</option>
+    </select>
+
     <button id="recordBtn" onclick="toggleRecording()">Start Recording</button>
-    <a id="downloadLink" style="display:none;" download="recorded.webm">Download Recording</a>
+    <a id="downloadLink" style="display:none;">Download Recording</a>
   </div>
 
   <script>
     const video = document.getElementById('webcam');
     const recordBtn = document.getElementById('recordBtn');
     const downloadLink = document.getElementById('downloadLink');
+    const formatSelect = document.getElementById('formatSelect');
 
     let mediaRecorder;
     let recordedChunks = [];
     let isRecording = false;
+    let fileExtension = 'webm';
 
     // Request access to webcam
     async function initWebcam() {
@@ -69,10 +139,19 @@
         };
 
         mediaRecorder.onstop = function () {
-          const blob = new Blob(recordedChunks, { type: 'video/webm' });
+          const selectedFormat = formatSelect.value;
+          const timestamp = new Date().toISOString().replace(/[:.]/g, '-');  // Format timestamp for filename
+          fileExtension = selectedFormat === 'mp4' ? 'mp4' : 'webm';
+          
+          // Generate dynamic filename with timestamp
+          const filename = `recorded-webcam-${timestamp}.${fileExtension}`;
+
+          const blob = new Blob(recordedChunks, { type: fileExtension === 'webm' ? 'video/webm' : 'video/mp4' });
           recordedChunks = [];
           const url = URL.createObjectURL(blob);
+          
           downloadLink.href = url;
+          downloadLink.download = filename;  // Automatically set filename
           downloadLink.style.display = 'inline-block';
         };
       } catch (err) {
